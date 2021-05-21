@@ -47,7 +47,7 @@ Lump Type | Status | Additional Notes
 24 - LUMP_PROPHULLVERTS | ❕ | Always empty, despite having an offset
 25 - LUMP_PROPTRIS | ❕ | Always empty, despite having an offset
 32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕ | Deprecated since Source 2006
-35 - LUMP_GAME_LUMP | ✔️ | .LMP file copies of this can't replace map props, due to the game lumps having vastly different and unknown offsets
+35 - LUMP_GAME_LUMP | ✔️ | Only shows Static Props. Please note standalone .LMP files of this Lump ID, has no method to replace map props. This is due to the game lumps requiring another offset, which vastly changes when its no longer part of the BSP file.
 45 - LUMP_OVERLAYS | ✔️ | RenderOrder needs to be checked if it displays values properly
 49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed terrain collision data
 57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Xbox lump, was a PAK file replacement
