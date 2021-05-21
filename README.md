@@ -3,6 +3,8 @@ Header files for visualising BSP binaries in Hex Editor Neo.
 
 ## Initialization
 Place the `Structures` folder in anywhere you want (preferrably the same as where Hex Editor Neo is installed), then go to *Tools > Structure Viewer > Library > Add Structue File...*, and add all the provided header files.
+<<<<<<< HEAD
+=======
 
 Then, simply access the Structure Viewer in *Tools > Structure Viewer > Bind*, pick `bsp.h` and two headers should be available. Bind the corresponding header, and the header files will auto-bind the corresponding structures. Both must be binded at the Absolute Offset of 0.
 
@@ -13,11 +15,10 @@ LUMPSINGLE_HEADER | Single lone lump file extracted from a BSP file, either with
 
 Not all lumps support their own headers yet. A later section will present a chart of supported Lumps.
 
+These headers are **only stable** for ![L4D2 Icon](https://developer.valvesoftware.com/w/images/9/93/L4D2-16px.png) Left 4 Dead 2's BSP files; Other games (even games also using v21 BSP files) may fail to bind in a reasonable time, so this should be done at your own risk.
 
 ## Addendum
-These headers are **only stable** for ![L4D2 Icon](https://developer.valvesoftware.com/w/images/9/93/L4D2-16px.png) Left 4 Dead 2's BSP files; Other games (even games also using v21 BSP files) may fail to bind in a reasonable time, so this should be done at your own risk. Whether support for other games will exist is unknown, but for the current moment, the other source game most likely to receive support is Left 4 Dead 1, and that even has a really low chance to happen.
-
-Currently, BSPs that are not version 21 will be rejected. If you wish to remove this feature, the check for this is located in the `dheaderbsp_t` struct, inside of the `bsp.h` file.
+Only Left 4 Dead 2 BSPs will support 'plug-and-play' at the moment, and thus will be maintained for it. Therefore for safety, BSPs that are not version 21 will be rejected. To remove this check manually, view the `bsp.h` file.
 
 ## Quick BSP Version Overview
 Information based on the [Source BSP File Format](https://developer.valvesoftware.com/wiki/Source_BSP_File_Format#Versions) page on the VDC.
@@ -53,3 +54,4 @@ Lump Type | Status | Additional Notes
 49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed terrain collision data
 57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Xbox lump, was a PAK file replacement
 63 - LUMP_UNUSED4 | ❕ | Only used in ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm onwards(?)
+=======
