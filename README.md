@@ -39,7 +39,7 @@ Information based on the [Source BSP File Format](https://developer.valvesoftwar
 ## Supported Lumps
 Lump Type | Status | Additional Notes
 --------- | ------ | ----------------
-0 - LUMP_ENTITIES | ❌
+0 - LUMP_ENTITIES | ❌ | Entities accept a wide variety of values and can differ greatly in KeyValue count. A custom-built parser is more suited, and more efficient for the task. Its contents are readable ASCII text, so simply using a text editor is able to understand its content. <br><br>For LUMP_ENTITIES editing however, use the [lmpfix](steamreview.org/external/vdc/lmpfix.zip) tool to correct the lump header's keys. (Treat it like its a compiler)
 18 - LUMP_BRUSHES | ✔️
 32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕
 22 - LUMP_PROPCOLLISION | ❕ | Always empty, despite having an offset
