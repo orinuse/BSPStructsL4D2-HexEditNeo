@@ -25,7 +25,7 @@ Information based on the [Source BSP File Format](https://developer.valvesoftwar
 * ![L4D2 Icon](https://developer.valvesoftware.com/w/images/9/93/L4D2-16px.png) Left 4 Dead 2
 > modified: lump_t, old dbrushside_t
 * ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm
-> modified: new LUMP_DISP_MULTIBLEND #63 
+> modified: new LUMP_DISP_MULTIBLEND #64
 * ![P2 Icon](https://developer.valvesoftware.com/w/images/7/77/Portal2-16px.png) Portal 2
 > modified: StaticPropLump_t ( version = 9 ), dbrushside_t and other structs
 * ![CS:GO Icon](https://developer.valvesoftware.com/w/images/3/35/Csgo.png) Counter-Strike: Global Offensive
@@ -52,4 +52,3 @@ Lump Type | Status | Additional Notes
 49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed terrain collision data
 57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Xbox lump, was a PAK file replacement
 63 - LUMP_UNUSED4 | ❕ | Only used in ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm onwards(?)
-=======
