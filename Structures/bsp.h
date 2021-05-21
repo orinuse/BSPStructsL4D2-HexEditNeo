@@ -137,7 +137,7 @@ struct dheaderlumpsingle_t
 	int	fileofs;
 	[color_scheme("Characteristics")]
 	int lumpID;
-	if( lumpID <= 63 )
+	if( lumpID <= 64 )
 	{
 		$print("Lump Type", LumpTypes[lumpID]);
 		BindLumpTypeAt(lumpID, fileofs);
