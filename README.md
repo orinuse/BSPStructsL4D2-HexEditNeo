@@ -41,14 +41,13 @@ Lump Type | Status | Additional Notes
 --------- | ------ | ----------------
 0 - LUMP_ENTITIES | ❌ | Entities accept a wide variety of values and can differ greatly in KeyValue count. A custom-built parser is more suited, and more efficient for the task. <br><br>Its contents are readable ASCII text, so simply using a text editor is able to understand its content. If you wish to edit this lump, use the [lmpfix](steamreview.org/external/vdc/lmpfix.zip) tool to correct the header. (Treat it like its a compiler)
 18 - LUMP_BRUSHES | ✔️
-32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕
 22 - LUMP_PROPCOLLISION | ❕ | Always empty, despite having an offset
 23 - LUMP_PROPHULLS | ❕ | Always empty, despite having an offset
 24 - LUMP_PROPHULLVERTS | ❕ | Always empty, despite having an offset
 25 - LUMP_PROPTRIS | ❕ | Always empty, despite having an offset
 32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕ | Deprecated since Source 2006
 35 - LUMP_GAME_LUMP | ✔️ | Only shows Static Props. Please note standalone .LMP files of this Lump ID, has no method to replace map props. This is due to the game lumps requiring another offset, which vastly changes when its no longer part of the BSP file.
-45 - LUMP_OVERLAYS | ✔️ | RenderOrder needs to be checked if it displays values properly
+45 - LUMP_OVERLAYS | ✔️ | RenderOrder needs to be checked if its values are displayed properly
 49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed terrain collision data
 57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Xbox lump, was a PAK file replacement
 63 - LUMP_UNUSED4 | ❕ | Only used in ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm onwards(?)

@@ -3,16 +3,26 @@
 // Ask around for info about flags, or unmystify the SDK 2013
 //===============================================
 #include "bsp_resources.h"
-
-// Get LUMP 18's filelength and put it in here. Needs to be divided by 12!
-#define BRUSH_COUNT (15024 / 12)
 #pragma once
 
+////////////////////////////////////////////////////////////////////////////////////
+// Tsuey's Notes:
+//
+// Brush Lump. Always 12 bytes for each brush definition in 18_LUMP_BRUSHES.
+// Where 'firstSide' is an index into 19_LUMP_BRUSHSIDES, 'numSides' is
+// the number of sides making up the brush, and 'contents' which is 
+// currently of interest to make brushes non-solid, change PLAYERCLIP or also
+// MONSTERCLIP flags, and make solids climbable.
+//
+// SIZE :: Always 12 bytes each brush.
+////////////////////////////////////////////////////////////////////////////////////
+//
 //===============================================
 // Enums
 enum BrushContents : int
 {
-	// CONTENTS_ prefix > CTS_ prefix
+	// CONTENTS_ prefix > CTS_ prefix.
+	// Its inaccurate yes, but its to show more flags visibly in structure viewer
 	
 	// "contents flags are seperate bits"
 	// "a given brush can contribute multiple content bits"
@@ -70,6 +80,7 @@ private struct dbrush_t
 {
 	int fstside;
 	int numside;
+	IncludeBSPScheme(); [color_scheme("z_Member")]
 	BrushContents flags;
 };
 /*

@@ -3,6 +3,39 @@
 //===============================================
 #pragma once // it says it loads this header ONCE, but it also doesnt show up in that header menu thing?
 
+////////////////////////////////////////////////////////////////////////////////////
+// JavaScript
+////////////////////////////////////////////////////////////////////////////////////
+
+// By Tsuey
+javascript
+{
+	function IncludeBSPScheme()
+	{
+		// For every clip, prop, or other major asset within each lump, draw it
+		// with white text over a dark midnight purple background, black outline,
+		// and no round edges to help visually separate them in Structure Viewer.
+
+		parser.add_coloring_scheme( "z_Array",
+			{ r:255,	g:255,	b:255,	a:255	},
+			{ r:32,		g:0,	b:64,	a:255	},
+			{ r:0,		g:0,	b:0,	a:255	}, false );
+
+		// For referential information like fileOfs, or targets of user modification
+		// like flags, draw attention to them with black text over a blue background,
+		// with a black outline and no round edges.
+
+		parser.add_coloring_scheme( "z_Member",
+			{ r:0,		g:0,	b:0,	a:255	},
+			{ r:16,		g:116,	b:216,	a:255	},
+			{ r:0,		g:0,	b:0,	a:255	}, false );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// Neo's Custom Standard C
+////////////////////////////////////////////////////////////////////////////////////
+
 // Custom Types
 //====================
 [display(format("{p2}, {p2}, {p2} [XYZ]", x, y, z))]
