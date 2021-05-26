@@ -6,65 +6,11 @@
 #define STATIC_PROP_NAME_LENGTH 128
 #pragma once
 
+/*
+Notes are at the very bottom
 ////////////////////////////////////////////////////////////////////////////////////
-// Tsuey's Notes:
-//
-// Per-map Game Lump (index 35) number of prop_statics for array count.
-//
-// Prop_Statics are the easiest to change in terms of editing the *.BSP and modifying
-// their origin to be under the map. In terms of *.LMP files, they'll be the hardest
-// if not impossible due to assumptions (which 100% work for ALL other lumps) the LMP
-// file system makes. We're lucky it's even this easy, since L4D2 always has these 4
-// lumps 0-bytes / empty (for EVERY map) which simplifies things significantly:
-//
-//	22	LUMP_PROPCOLLISION	Static props convex hull lists
-//	23	LUMP_PROPHULLS		Static prop convex hulls
-//	24	LUMP_PROPHULLVERTS	Static prop collision vertices
-//	25	LUMP_PROPTRIS		Static prop per hull triangle index start/count
-//
-// This lump is not as straight-forward. Map bsp_edit_test_version2 has 6 prop_static
-// in lump 35 and 1,278 fileLen (lump in byte size). BSP_EDIT_TEST has 0 prop_static
-// but its lump is still 60 bytes large. Map c1m1_hotel has lump 35 at 156260 bytes,
-// and 1748 prop_statics (counted in the decompiled VMF).
-//
-// Since this lump starts with a "model dictionary" before the prop_static structure
-// (with the origins etc.), this lump has multiple structures -- so it's going to be
-// more complicated than the Brush Lump, especially considering that 0 prop_static
-// still results in a 60 byte file size, so counting the number of prop_static this
-// time will not be as easy as dividing by 12.
-//
-// ADDENDUM #1:
-//
-//	The above sizes are for reference only. Struct StaticPropBlockLumps_t defines
-//	a "int propEntries", where the StaticPropBlock starts with the total number
-//	of prop_statics in the map -- so they don't need to be counted with division,
-//	where in Brush Lump 18 there's no data for this.
-//
-//	Similarly, the model dictionary knows this with "int nameEntries".
-//
-// Game Lump header has its own game-specific lumps within it, where "prps" refers
-// to prop_static and "prpd" prop_detail. Structure dgamelump_t defines those lumps,
-// in the same way that struct lump_t defines the BSP file's overall 64 main lumps.
-//
-// ADDENDUM #2:
-//
-//	Valve Wiki refers to "prps" as "sprp" instead (still prop_static),
-//	and "prpd" as "dprp" instead (still prop_detail). All of Valve's maps
-//	for L4D2 will have at least these 2.
-//
-//	The prop lighting lump (dplt for LDR and dplh for HDR) may also exist,
-//	used for prop_detail entities (i.e. grass tufts) automatically emitted
-//	by certain textures when placed on displacement surfaces.
-//
-// It exists to allow extension with new lumps without modifying the main BSP format.
-//
-// Lump "prps" (for prop_statics) starts with a model dictionary that defines all
-// the unique model strings used, then the prop_static structure itself with all the
-// propModelIndex to that dictionary and the Origin/Angles for all the props.
-//
-//=============
 // Orin's Notes:
-//=============
+//
 //	This lump is a peculiar one, its goal is to contain lumps prone to constant
 //	change throughout multiple games. A Developer even had a short-lived
 //	idea, "// FIXME: Eventually, all lumps could use the game lump system".
@@ -80,18 +26,11 @@
 //	header's offset. Leaving it to defaults result in it pointing to the BSP's
 //	default props.... Not sure how we'll approach this.
 ////////////////////////////////////////////////////////////////////////////////////
+*/
+#pragma script("bsp_lump35_script.js")
 
 //===============================================
 // Enums!
-enum GameLumpID : int
-{
-	// All of them had the prefix ''STATIC_PROP_" and I abbreivated it
-	GL_STATIC_PROPS = 1936749168, // "prps"
-	GL_DETAIL_PROPS = 1685090928, // "prpd"
-	GL_DETAIL_PROP_LIGHTING = 1685089396, // "tlpd"
-	GL_DETAIL_PROP_LIGHTING_HDR = 1685089384, // "hlpd"
-};
-
 // These are for the "StaticPropLump_t" struct
 //{
 		enum CPULevel : unsigned char // For 'SystemLevelChoice' related entity KVs
@@ -179,7 +118,8 @@ struct StaticPropLump_t
 	[description("Orientation (Pitch Yaw Roll)")]
 	QAngle Angles;
 
-	[color_scheme("Characteristics"), description("Index into Model Dictionary")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member"), description("Index into Model Dictionary")]
 	unsigned short  ModelIndex;
 	[description("Index into Visleaf Dictionary")]
 	unsigned short  LeafIndex;
@@ -227,49 +167,111 @@ struct StaticPropLump_t
 [display(format("Models: {}", modelEntries))]
 struct StaticPropDictLump_t
 {
-	IncludeBSPScheme(); [color_scheme("z_Member")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member")]
 	int	modelEntries;
 	struct dstaticpropdictname_t
 	{
-		IncludeBSPScheme(); [color_scheme("z_Member")]
 		char modelpath[STATIC_PROP_NAME_LENGTH];
 	};
+	[color_scheme("z_Array")]
 	dstaticpropdictname_t modelsIndexes[modelEntries];	// model name
 };
 
 [display(format("Leaves: {}", leafEntries))]
 struct StaticPropLeafLump_t
 {
-	IncludeBSPScheme(); [color_scheme("z_Member")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member")]
 	int leafEntries;
-	IncludeBSPScheme(); [color_scheme("z_Array")]
+	[color_scheme("z_Array")]
 	unsigned short	leaves[leafEntries];
 };
 
 [display(format("Static Props: {}", propEntries))]
 struct StaticPropBlockLumps_t
 {
-	IncludeBSPScheme(); [color_scheme("z_Member")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member")]
 	int propEntries;
-	IncludeBSPScheme(); [color_scheme("z_Array")]
-	StaticPropLump_t	staticProps[propEntries];
+	[color_scheme("z_Array")]
+	StaticPropLump_t staticProps[propEntries];
 };
 
 //===============================================
 // Headers
 
 // Game lumps themselves share headers
-[display(format("Offset: {}", fileofs))]
+[display( tostring_GameLumpID(id) )]
 private struct dgamelump_t
 {
-	[exact_only]
-	GameLumpID id;		// gamelump ID
+	IncludeBSPScheme();
+	[color_scheme("z_Member"), onread( tostring_GameLumpID(id) )]
+	char id[4];		// gamelump ID
+	[onread( flags == 1 ? "GAMELUMP_COMPRESSED" : "none" )]
 	unsigned short	flags;		// flags
 	unsigned short	version;	// gamelump version
-	IncludeBSPScheme(); [color_scheme("z_Member")]
+	[color_scheme("z_Member")]
 	int		fileofs_bsp;	// offset to this gamelump
 	int		filelen;	// length
 };
 /*
 Main Binded Header isn't in here; Check bsp.h!
+
+////////////////////////////////////////////////////////////////////////////////////
+// Tsuey's Notes:
+//
+// Per-map Game Lump (index 35) number of prop_statics for array count.
+//
+// Prop_Statics are the easiest to change in terms of editing the *.BSP and modifying
+// their origin to be under the map. In terms of *.LMP files, they'll be the hardest
+// if not impossible due to assumptions (which 100% work for ALL other lumps) the LMP
+// file system makes. We're lucky it's even this easy, since L4D2 always has these 4
+// lumps 0-bytes / empty (for EVERY map) which simplifies things significantly:
+//
+//	22	LUMP_PROPCOLLISION	Static props convex hull lists
+//	23	LUMP_PROPHULLS		Static prop convex hulls
+//	24	LUMP_PROPHULLVERTS	Static prop collision vertices
+//	25	LUMP_PROPTRIS		Static prop per hull triangle index start/count
+//
+// This lump is not as straight-forward. Map bsp_edit_test_version2 has 6 prop_static
+// in lump 35 and 1,278 fileLen (lump in byte size). BSP_EDIT_TEST has 0 prop_static
+// but its lump is still 60 bytes large. Map c1m1_hotel has lump 35 at 156260 bytes,
+// and 1748 prop_statics (counted in the decompiled VMF).
+//
+// Since this lump starts with a "model dictionary" before the prop_static structure
+// (with the origins etc.), this lump has multiple structures -- so it's going to be
+// more complicated than the Brush Lump, especially considering that 0 prop_static
+// still results in a 60 byte file size, so counting the number of prop_static this
+// time will not be as easy as dividing by 12.
+//
+// ADDENDUM #1:
+//
+//	The above sizes are for reference only. Struct StaticPropBlockLumps_t defines
+//	a "int propEntries", where the StaticPropBlock starts with the total number
+//	of prop_statics in the map -- so they don't need to be counted with division,
+//	where in Brush Lump 18 there's no data for this.
+//
+//	Similarly, the model dictionary knows this with "int nameEntries".
+//
+// Game Lump header has its own game-specific lumps within it, where "prps" refers
+// to prop_static and "prpd" prop_detail. Structure dgamelump_t defines those lumps,
+// in the same way that struct lump_t defines the BSP file's overall 64 main lumps.
+//
+// ADDENDUM #2:
+//
+//	Valve Wiki refers to "prps" as "sprp" instead (still prop_static),
+//	and "prpd" as "dprp" instead (still prop_detail). All of Valve's maps
+//	for L4D2 will have at least these 2.
+//
+//	The prop lighting lump (dplt for LDR and dplh for HDR) may also exist,
+//	used for prop_detail entities (i.e. grass tufts) automatically emitted
+//	by certain textures when placed on displacement surfaces.
+//
+// It exists to allow extension with new lumps without modifying the main BSP format.
+//
+// Lump "prps" (for prop_statics) starts with a model dictionary that defines all
+// the unique model strings used, then the prop_static structure itself with all the
+// propModelIndex to that dictionary and the Origin/Angles for all the props.
+////////////////////////////////////////////////////////////////////////////////////
 */

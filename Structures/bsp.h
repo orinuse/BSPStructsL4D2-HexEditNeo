@@ -61,7 +61,7 @@ struct lump_t
 {
 	int	version;	// lump format version
 
-	[description(fileofs_desc), color_scheme("Characteristics")]
+	IncludeBSPScheme(); [color_scheme("z_Member"), description(fileofs_desc)]
 	int	fileofs;	// offset into file (bytes)
 	int	filelen;	// length of lump (bytes)
 
@@ -124,18 +124,20 @@ struct dheaderbsp_t
 {
 	char ident[4];                // BSP file identifier
 	int	version;              // BSP file version
+	IncludeBSPScheme(); [color_scheme("z_Array")]
 	lump_t lumps[64];  // lump directory array
 
-	$assert(version == 21, "Bind only v21 BSPs! [Left 4 Dead 2]");
-	[description(mapRevision_desc), color_scheme("Characteristics")]
+	$assert(version == 21, "Bind only v21 BSPs [and only Left 4 Dead 2's please]");
+	[description(mapRevision_desc)]
 	int	mapRevision;		// the map's revision (iteration, version) number
 };
 [display(format("Offset: {}", fileofs))]
 struct dheaderlumpsingle_t
 {
-	[description(fileofs_desc), color_scheme("Characteristics")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member"), description(fileofs_desc)]
 	int	fileofs;
-	[color_scheme("Characteristics")]
+	[color_scheme("z_Member")]
 	int lumpID;
 	if( lumpID <= 64 )
 	{

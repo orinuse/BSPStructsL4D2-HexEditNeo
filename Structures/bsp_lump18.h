@@ -16,7 +16,9 @@
 //
 // SIZE :: Always 12 bytes each brush.
 ////////////////////////////////////////////////////////////////////////////////////
-//
+
+#pragma script("bsp_lump18_js")
+
 //===============================================
 // Enums
 enum BrushContents : int
@@ -76,6 +78,8 @@ enum BrushContents : int
 //===============================================
 // Structs
 // hello ProdigySim's block 
+
+[display( format( "First Side: {}, Total Sides: {}", fstside, numside ) )]
 private struct dbrush_t
 {
 	int fstside;

@@ -15,6 +15,34 @@ Not all lumps support their own headers yet. A later section will present a char
 
 These headers are **only stable** for ![L4D2 Icon](https://developer.valvesoftware.com/w/images/9/93/L4D2-16px.png) Left 4 Dead 2's BSP files; Other games (even games also using v21 BSP files) may fail to bind in a reasonable time, so this should be done at your own risk.
 
+## Features
+- Automatic binding assist of supported lumps
+- Two custom color schemes. If you want to change the colors, here are the schemes:
+Scheme Name | Font | Back | Outline 
+----------- | ---- | ---- | -------
+z_Member | { r:255, g:255, b:255 } [White] | { r:32, b:64 } [Navy Blue] | { a:255 }
+z_Array | { a:255 } | { r:32, b:64 } | { a:255 }
+- - Both schemes do not use rounded edges.
+- - All "remark" objects have their parameters default to 0 if not specified, except for alpha. (`a`)
+
+
+### Lumps Support Status
+Lump Type | Status | Additional Notes
+--------- | ------ | ----------------
+0 - LUMP_ENTITIES | ❌ | Entities accept a wide variety of values and can differ greatly in KeyValue count. A custom-built parser is more suited, and more efficient for the task. <br><br>Its contents are readable ASCII text, so simply using a text editor is able to understand its content. If you wish to edit this lump, use the [lmpfix](steamreview.org/external/vdc/lmpfix.zip) tool to correct the header. (Treat it like its a compiler)
+18 - LUMP_BRUSHES | ✔️
+22 - LUMP_PROPCOLLISION | ❕ | Always empty, despite having an offset
+23 - LUMP_PROPHULLS | ❕ | Always empty, despite having an offset
+24 - LUMP_PROPHULLVERTS | ❕ | Always empty, despite having an offset
+25 - LUMP_PROPTRIS | ❕ | Always empty, despite having an offset
+32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕ | Deprecated since Source 2006
+35 - LUMP_GAME_LUMP | ✔️ | Only fully supports Static Props, partially supports detail props by supporting their lump headers
+45 - LUMP_OVERLAYS | ✔️ | RenderOrder needs to be checked if its values are displayed properly. Low priority.
+49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed VPhysics collision data
+57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Console lump, was a PAK file replacement
+63 - LUMP_UNUSED4 | ❕ | Only used in ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm onwards(?)
+
+
 ## Addendum
 Only Left 4 Dead 2 BSPs will support 'plug-and-play' at the moment, and thus will be maintained for it. Therefore for safety, BSPs that are not version 21 will be rejected. To remove this check manually, view the `bsp.h` file.
 
@@ -35,19 +63,3 @@ Information based on the [Source BSP File Format](https://developer.valvesoftwar
 * ![Insurgency Icon](https://developer.valvesoftware.com/w/images/a/af/Insurgency_16x_icon.png) Insurgency (commercial release) 	
 * ![Stanley Parable Icon](https://developer.valvesoftware.com/w/images/8/88/The_stanley_parable_icon.PNG) The Stanley Parable (commercial release) 	
 * The Beginner's Guide 	
-
-## Supported Lumps
-Lump Type | Status | Additional Notes
---------- | ------ | ----------------
-0 - LUMP_ENTITIES | ❌ | Entities accept a wide variety of values and can differ greatly in KeyValue count. A custom-built parser is more suited, and more efficient for the task. <br><br>Its contents are readable ASCII text, so simply using a text editor is able to understand its content. If you wish to edit this lump, use the [lmpfix](steamreview.org/external/vdc/lmpfix.zip) tool to correct the header. (Treat it like its a compiler)
-18 - LUMP_BRUSHES | ✔️
-22 - LUMP_PROPCOLLISION | ❕ | Always empty, despite having an offset
-23 - LUMP_PROPHULLS | ❕ | Always empty, despite having an offset
-24 - LUMP_PROPHULLVERTS | ❕ | Always empty, despite having an offset
-25 - LUMP_PROPTRIS | ❕ | Always empty, despite having an offset
-32 - LUMP_DISP_LIGHTMAP_ALPHAS | ❕ | Deprecated since Source 2006
-35 - LUMP_GAME_LUMP | ✔️ | Only shows Static Props. Please note standalone .LMP files of this Lump ID, has no method to replace map props. This is due to the game lumps requiring another offset, which vastly changes when its no longer part of the BSP file.
-45 - LUMP_OVERLAYS | ✔️ | RenderOrder needs to be checked if its values are displayed properly
-49 - LUMP_PHYSCOLLIDESURFACE | ❕ | Deprecated, was win32 specific compressed terrain collision data
-57 - LUMP_XZIPPAKFILE | ❕ | Deprecated Xbox lump, was a PAK file replacement
-63 - LUMP_UNUSED4 | ❕ | Only used in ![AS Icon](https://developer.valvesoftware.com/w/images/c/c9/AS-16px.png) Alien Swarm onwards(?)

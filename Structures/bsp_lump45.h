@@ -1,8 +1,8 @@
 #include "bsp_resources.h"
 #pragma once
 
-// Started by Tsuey
 ////////////////////////////////////////////////////////////////////////////////////
+//	Tsuey's Notes:
 //
 // 45_LUMP_OVERLAYS.bin is the "info_overlay data array". Unlike simplier decals
 // (i.e. infodecal entities), info_overlays are removed from the entity lump and
@@ -87,11 +87,12 @@ struct UV_t
 private struct doverlay_t
 {	
 	int		Index;
-	[description("Indice to access the used Texdata struct")]
+	IncludeBSPScheme();
+	[color_scheme("z_Member"), description("Indice to access the used Texdata struct")]
 	short		TexInfo;
 
 	FaceCountAndRenderOrder_t FaceCountAndRenderOrder;
-	[description("Indices to access the touched Faces's struct")]
+	[color_scheme("z_Array"), description("Indices to access the touched Faces's struct")]
 	int		OnFaces[ OVERLAY_BSP_FACE_COUNT ];
 	UV_t UV;
 
