@@ -16,14 +16,24 @@ Not all lumps support their own headers yet. A later section will present a char
 These headers are **only stable** for ![L4D2 Icon](https://developer.valvesoftware.com/w/images/9/93/L4D2-16px.png) Left 4 Dead 2's BSP files; Other games (even games also using v21 BSP files) may fail to bind in a reasonable time, so this should be done at your own risk.
 
 ## Features
-- Automatic binding assist of supported lumps
+- Automatic binding assist of supported lumps. See "Lump Support Status" for info on supported lumps.
 - Two custom color schemes. If you want to change the colors, here are the schemes:
-Scheme Name | Font | Back | Outline 
------------ | ---- | ---- | -------
-z_Member | { r:255, g:255, b:255 } [White] | { r:32, b:64 } [Navy Blue] | { a:255 }
-z_Array | { a:255 } | { r:32, b:64 } | { a:255 }
 - - Both schemes do not use rounded edges.
-- - All "remark" objects have their parameters default to 0 if not specified, except for alpha. (`a`)
+- - All "remark" objects have their parameters default to 0 if not specified, except for alpha, which defaults to 255. (`a`)
+### Color Names
+Color Name		| Remark Data 
+-----------		| -----------
+Gainsboro		| r:225, g:225, b:225, a:255 
+Sapphire		| r:32, g:0, b:64, a:230 
+Denim			| r:16, g:116, b:216, a:230
+Nero			| r:30, g:30, b:30, a:255
+Dark Tangerine	| r:255, g:170, b:0, a:225
+
+### Scheme Names
+Scheme Name | Font		| Back 				| Outline 
+----------- | ---- 		| ----				| -------
+z_Member	| Gainsboro	| Sapphire			| Denim
+z_Array		| Nero		| Dark Tangerine	| Sapphire
 
 
 ### Lumps Support Status
