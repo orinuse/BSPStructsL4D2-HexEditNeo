@@ -1,4 +1,5 @@
 # BSP Structs for Hex Editor Neo [L4D2 Only]
+**NOTE: This branch is abandoned, and only left as files to whoever willing to pick this up.**
 Header files for visualising BSP binaries in Hex Editor Neo.
 
 ## Initialization
