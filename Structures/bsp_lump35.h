@@ -27,7 +27,7 @@ Notes are at the very bottom
 //	default props.... Not sure how we'll approach this.
 ////////////////////////////////////////////////////////////////////////////////////
 */
-#pragma script("bsp_lump35_script.js")
+#pragma script("bsp_lump35.js")
 
 //===============================================
 // Enums!

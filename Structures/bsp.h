@@ -1,4 +1,5 @@
 #include "bsp_resources.h"
+#include "bsp_lump3.h"
 #include "bsp_lump18.h"
 #include "bsp_lump35.h"
 #include "bsp_lump45.h"
@@ -7,118 +8,30 @@
 #define fourCC_desc "Identifier, XBOX / PS3 lumps only(?)"
 #define mapRevision_desc "VMF Save Count"
 
-////////////////////////////////////////////////////////////////////////////////////
-// JavaScript
-////////////////////////////////////////////////////////////////////////////////////
+const HEADER_LUMPS = 64;
 
-// This is necessary because JS can use globals lol
-javascript
-{
-	var LumpBindArraySize = 0;
-	function SetLumpBindArraySize(size)
-	{
-		LumpBindArraySize = size;
-	}
-	function GetLumpBindArraySize()
-	{
-		return LumpBindArraySize;
-	}
-	function BindLumpTypeAt(typeID, offset)
-	{
-		const HEADER_LUMPS = 64;
-		if( typeID <= HEADER_LUMPS )
-		{
-			switch( typeID )
-			{
-				case 18:
-					parser.bind("struct LUMP_BRUSHES", "brusheslump_container", offset);
-					break;
-				case 35:
-					parser.bind("struct LUMP_GAME_LUMP", "gamelumps_container", offset);
-					break;
-				case 45:
-					parser.bind("struct LUMP_OVERLAYS", "overlayslump_container", offset);
-					break;
-				default:
-					parser.abort("Lump ID: ".concat(typeID, " does not have its own header yet."));
-			}
-		}
-		else
-		{
-			parser.abort("Invalid Lump ID: ".concat(typeID, ", IDs must be 0-64."));
-		}
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////
-// Neo's Custom Standard C
-////////////////////////////////////////////////////////////////////////////////////
-//--------------------
-// Lumps
-//--------------------
+//--------------------------
+// Lumps - Headers BASE
+//--------------------------
 [display(format("Offset: {}", fileofs))]
 struct lump_t
 {
 	int	version;	// lump format version
-
-	IncludeBSPScheme(); [color_scheme("z_Member"), description(fileofs_desc)]
+	IncludeBSPScheme();
+	[color_scheme("z_Member"), description(fileofs_desc)]
 	int	fileofs;	// offset into file (bytes)
 	int	filelen;	// length of lump (bytes)
 
 	[description(fourCC_desc)]
 	char fourCC[4];	// lump ident code
 
-//--------------------
-// Auto Binder, etc.
-	if( array_index <= 63 )
-	{
+	if( array_index < HEADER_LUMPS )
 		$print("Lump Type", LumpTypes[array_index]);
-		switch( array_index )
-		{
-			case 18:
-				var size = filelen / 12;
-				SetLumpBindArraySize(size);
-				break;
-			case 22:
-			case 23:
-			case 24:
-			case 25:
-				$print("Lump Note", "UNUSED - Reported always empty, despite having an offset.");
-				$print("Lump Note #2", "Was this experimental indev code?");
-				break;
-			case 32:
-				$print("Lump Note", "UNUSED - Before Source 2006, It supposedly had actual data.");
-				break;
-			case 45:
-				var size = filelen / 352;
-				SetLumpBindArraySize(size);
-				break;
-			case 49:
-				$print("Lump Note", "DEPRECATED - Win-32 compressed Havok terrain surface collision data");
-				break;
-			case 55:
-				$print("Lump Note", "This data overrides part of the data stored in LUMP_LEAFS");
-				break;
-			case 56:
-				$print("Lump Note", "This data overrides part of the data stored in LUMP_LEAFS");
-				break;
-			case 57:
-				$print("Lump Note", "DEPRECATED - In Xbox, was to replace PAK with XZip");
-				break;
-			case 60:
-				$print("Lump Note", "Overlay fade distances");
-				break;
-			case 61:
-				$print("Lump Note", "Likely, 'minmax' Shader/Effects level settings");
-				break;
-		}
-		BindLumpTypeAt(array_index, fileofs);
-	}
 };
 
-//--------------------
-// Headers
-//--------------------
+//--------------------------
+// BSP - Headers BASE
+//--------------------------
 // Resources
 struct dheaderbsp_t
 {
@@ -139,11 +52,6 @@ struct dheaderlumpsingle_t
 	int	fileofs;
 	[color_scheme("z_Member")]
 	int lumpID;
-	if( lumpID <= 64 )
-	{
-		$print("Lump Type", LumpTypes[lumpID]);
-		BindLumpTypeAt(lumpID, fileofs);
-	}
 	
 	[description(fourCC_desc)]
 	char fourCC[4];
@@ -151,9 +59,13 @@ struct dheaderlumpsingle_t
 	
 	[description(mapRevision_desc)]
 	int	mapRevision;
+	
+	if( lumpID < HEADER_LUMPS )
+		$print("Lump Type", LumpTypes[lumpID]);
 };
 
-// To be binded
+// BSP - Headers
+//--------------------------
 public struct BSP_HEADER
 {
 	dheaderbsp_t header;
@@ -163,20 +75,28 @@ public struct LUMPSINGLE_HEADER
 	dheaderlumpsingle_t header;
 };
 
-//--------------------
-// Lumps's Headers
-//--------------------
-// LUMP #18
-[display(format("Brushes: {}", count))]
-private struct LUMP_BRUSHES
+//--------------------------
+// Lumps - Headers
+//--------------------------
+// LUMP #3
+[display(format("Binded Vertexes: {}", count))]
+public struct LUMP_VERTEXES
 {
-	var count = GetLumpBindArraySize();
+	var count = 37;
+	dvertex_t vertex[count];
+};
+
+// LUMP #18
+[display(format("Binded Brushes: {}", count))]
+public struct LUMP_BRUSHES
+{
+	var count = 37;
 	dbrush_t brush[count];
 };
 
 // LUMP #35
 [display(format("Game Lumps: {}", lumpCount))]
-private struct LUMP_GAME_LUMP
+public struct LUMP_GAME_LUMP
 {
 	int lumpCount;	// number of game lumps
 	dgamelump_t gamelump[lumpCount];
@@ -186,9 +106,9 @@ private struct LUMP_GAME_LUMP
 };
 
 // LUMP #45
-[display(format("Overlays: {}", count))]
-private struct LUMP_OVERLAYS
+[display(format("Binded Overlays: {}", count))]
+public struct LUMP_OVERLAYS
 {
-	var count = GetLumpBindArraySize();
+	var count = 37;
 	doverlay_t overlay[count];
 };
